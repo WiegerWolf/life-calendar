@@ -25,7 +25,7 @@ interface TooltipData {
 
 const LifeCalendar: React.FC<LifeCalendarProps> = ({ birthDate, lifeEvents }) => {
   const [tooltipData, setTooltipData] = useState<TooltipData | null>(null);
-  const gridRef = useRef<HTMLDivElement>(null);
+  const tableRef = useRef<HTMLTableElement>(null);
 
   const today = new Date();
   const startDate = new Date(birthDate.getFullYear(), 0, 1); // January 1st of birth year
@@ -35,6 +35,7 @@ const LifeCalendar: React.FC<LifeCalendarProps> = ({ birthDate, lifeEvents }) =>
   const weeksLived = Math.floor((today.getTime() - birthDate.getTime()) / (7 * 24 * 60 * 60 * 1000));
   const futureWeeks = 52 * 5; // Show 5 years into the future
   const totalWeeks = weeksBeforeBirth + weeksLived + futureWeeks;
+  const totalYears = Math.ceil(totalWeeks / 52);
 
   const getDateOfWeek = (weekIndex: number) => {
     const date = new Date(startDate.getTime() + weekIndex * 7 * 24 * 60 * 60 * 1000);
@@ -61,30 +62,19 @@ const LifeCalendar: React.FC<LifeCalendarProps> = ({ birthDate, lifeEvents }) =>
     }
   };
 
-  const handleMouseMove = (event: React.MouseEvent) => {
-    if (!gridRef.current) return;
-
-    const rect = gridRef.current.getBoundingClientRect();
-    const x = event.clientX - rect.left;
-    const y = event.clientY - rect.top;
-
-    const blockWidth = rect.width / 52;
-    const blockHeight = rect.height / Math.ceil(totalWeeks / 52);
-
-    const col = Math.floor(x / blockWidth);
-    const row = Math.floor(y / blockHeight);
-
-    const index = row * 52 + col;
-
-    if (index >= 0 && index < totalWeeks) {
-      const [_, eventName] = getColorAndEventForWeek(index);
+  const handleMouseMove = (event: React.MouseEvent<HTMLTableElement>) => {
+    const target = event.target as HTMLTableCellElement;
+    if (target.tagName === 'TD' && target.dataset.week) {
+      const weekIndex = parseInt(target.dataset.week, 10);
+      const rect = target.getBoundingClientRect();
+      const [_, eventName] = getColorAndEventForWeek(weekIndex);
       setTooltipData({
-        weekNumber: index + 1,
-        date: getDateOfWeek(index),
+        weekNumber: weekIndex + 1,
+        date: getDateOfWeek(weekIndex),
         event: eventName,
-        isPast: index < weeksLived,
-        x: x, // Use position relative to the grid
-        y: y, // Use position relative to the grid
+        isPast: weekIndex < weeksBeforeBirth + weeksLived,
+        x: event.clientX - rect.left,
+        y: event.clientY - rect.top,
       });
     } else {
       setTooltipData(null);
@@ -99,49 +89,48 @@ const LifeCalendar: React.FC<LifeCalendarProps> = ({ birthDate, lifeEvents }) =>
   const seasons = ['Winter', 'Spring', 'Summer', 'Fall'];
 
   return (
-    <div className="relative">
-      {/* Month and Season Labels */}
-      <div className="flex mb-1 ml-8"> {/* Added left margin to align with grid */}
-        {months.map((month, index) => (
-          <div key={month} className="w-[7.69%] text-xs text-center"> {/* Fixed width for alignment */}
-            {month}
-            {index % 3 === 0 && (
-              <div className="text-xs font-bold">{seasons[Math.floor(index / 3)]}</div>
-            )}
-          </div>
-        ))}
-      </div>
-
-      <div className="flex">
-        {/* Year Labels */}
-        <div className="flex flex-col mr-2 pt-1.5"> {/* Added top padding to align with grid */}
-          {Array.from({ length: Math.ceil(totalWeeks / 52) }).map((_, index) => (
-            <div key={index} className="h-3 text-xs flex items-center justify-end w-6">
-              {startDate.getFullYear() + index}
-            </div>
+    <div className="relative overflow-x-auto">
+      <table
+        ref={tableRef}
+        className="border-collapse"
+        onMouseMove={handleMouseMove}
+        onMouseLeave={handleMouseLeave}
+      >
+        <thead>
+          <tr>
+            <th></th> {/* Empty cell for the top-left corner */}
+            {months.map((month, index) => (
+              <th key={month} className="text-xs font-normal px-1" colSpan={index === 0 || index === 11 ? 5 : 4}>
+                {month}
+                {index % 3 === 0 && (
+                  <div className="text-xs font-bold">{seasons[Math.floor(index / 3)]}</div>
+                )}
+              </th>
+            ))}
+          </tr>
+        </thead>
+        <tbody>
+          {Array.from({ length: totalYears }).map((_, yearIndex) => (
+            <tr key={yearIndex}>
+              <th className="text-xs font-normal pr-2 text-right">
+                {startDate.getFullYear() + yearIndex}
+              </th>
+              {Array.from({ length: 52 }).map((ff, weekIndex) => {
+                const absoluteWeekIndex = yearIndex * 52 + weekIndex;
+                const [color, _] = getColorAndEventForWeek(absoluteWeekIndex);
+                return (
+                  <td
+                    key={weekIndex}
+                    className={`w-2 h-2 md:w-3 md:h-3 ${color}`}
+                    data-week={absoluteWeekIndex}
+                  />
+                );
+              })}
+            </tr>
           ))}
-        </div>
+        </tbody>
+      </table>
 
-        {/* Life Calendar Grid */}
-        <div
-          ref={gridRef}
-          className="grid grid-cols-52 gap-0.5"
-          onMouseMove={handleMouseMove}
-          onMouseLeave={handleMouseLeave}
-        >
-          {Array.from({ length: totalWeeks }).map((ff, index) => {
-            const [color, _] = getColorAndEventForWeek(index);
-            return (
-              <div
-                key={index}
-                className={`w-2 h-2 md:w-3 md:h-3 rounded-sm ${color}`}
-              />
-            );
-          })}
-        </div>
-      </div>
-
-      {/* Tooltip */}
       {tooltipData && (
         <div
           className="absolute z-10 p-2 text-sm bg-white border rounded shadow-lg"
