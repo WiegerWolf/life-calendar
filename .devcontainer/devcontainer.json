@@ -12,7 +12,8 @@
 	"customizations": {
 		"vscode": {
 			"extensions": [
-				"actboy168.tasks"
+				"actboy168.tasks",
+				"Codeium.codeium"
 			]
 		}
 	}
