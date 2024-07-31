@@ -4,7 +4,7 @@ import LifeCalendar from '../components/LifeCalendar';
 const lifeEvents = [
   // Kindergarten
   { name: 'Kindergarten', startDate: new Date(1997, 8, 1), endDate: new Date(1998, 7, 31), color: 'bg-yellow-400' },
-  
+
   // Elementary School (Classes 1-3)
   { name: 'Elementary School', startDate: new Date(1998, 8, 1), endDate: new Date(1999, 5, 31), color: 'bg-green-500' },
   { name: 'Summer Vacation', startDate: new Date(1999, 6, 1), endDate: new Date(1999, 7, 31), color: 'bg-yellow-300' },
@@ -52,8 +52,7 @@ export default function Home() {
   const weeksLived = Math.floor((today.getTime() - birthDate.getTime()) / (7 * 24 * 60 * 60 * 1000));
 
   return (
-    <main className="flex min-h-screen flex-col items-center justify-start p-4 sm:p-8">
-      <h1 className="text-2xl font-bold mb-2">My Life Calendar</h1>
+    <main className="flex min-h-screen flex-col items-center justify-start p-4">
       <div className="text-sm mb-4 text-center">
         <p>Born: Apr 15, 1991 | Age: {age} | Weeks: {weeksLived}</p>
       </div>

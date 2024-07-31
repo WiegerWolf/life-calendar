@@ -147,7 +147,6 @@ const LifeCalendar: React.FC<LifeCalendarProps> = ({ birthDate, lifeEvents }) =>
                                 </th>
                             );
                         })}
-                        {/* Add the last season (Spring) if necessary */}
                         {seasonLengths[4] > 0 && (
                             <th 
                                 className={`${seasonColors['Spring']} font-semibold`} 
@@ -156,6 +155,7 @@ const LifeCalendar: React.FC<LifeCalendarProps> = ({ birthDate, lifeEvents }) =>
                                 Spring
                             </th>
                         )}
+                        <th></th> {/* Add an empty header for the age column */}
                     </tr>
                     <tr>
                         <th></th>
@@ -164,6 +164,7 @@ const LifeCalendar: React.FC<LifeCalendarProps> = ({ birthDate, lifeEvents }) =>
                                 {index + 1}
                             </th>
                         ))}
+                        <th className="text-xs font-semibold px-2">Age</th> {/* Add header for age column */}
                     </tr>
                 </thead>
                 <tbody>
@@ -183,6 +184,9 @@ const LifeCalendar: React.FC<LifeCalendarProps> = ({ birthDate, lifeEvents }) =>
                                     />
                                 );
                             })}
+                            <td className="text-xs font-normal pl-2 text-left">
+                                {yearIndex} {/* Display age */}
+                            </td>
                         </tr>
                     ))}
                 </tbody>
