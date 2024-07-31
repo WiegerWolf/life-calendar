@@ -84,15 +84,6 @@ const LifeCalendar: React.FC<LifeCalendarProps> = ({ birthDate, lifeEvents }) =>
         setTooltipData(null);
     };
 
-
-    const getSeasonClass = (weekIndex: number): string => {
-        if (weekIndex === 0) return 'border-l-2 border-blue-500'; // Winter
-        if (weekIndex === 13) return 'border-l-2 border-green-500'; // Spring
-        if (weekIndex === 26) return 'border-l-2 border-red-500'; // Summer
-        if (weekIndex === 39) return 'border-l-2 border-orange-500'; // Fall
-        return '';
-    };
-
     const getSeasonInfo = () => {
         const birthMonth = birthDate.getMonth();
         const birthDay = birthDate.getDate();
@@ -159,7 +150,7 @@ const LifeCalendar: React.FC<LifeCalendarProps> = ({ birthDate, lifeEvents }) =>
                     <tr>
                         <th></th>
                         {Array.from({ length: 52 }).map((_, index) => (
-                            <th key={index} className={`text-xs font-normal px-1 ${getSeasonClass(index)}`}>
+                            <th key={index} className="text-xs font-normal px-1">
                                 {index + 1}
                             </th>
                         ))}
@@ -174,11 +165,10 @@ const LifeCalendar: React.FC<LifeCalendarProps> = ({ birthDate, lifeEvents }) =>
                             {Array.from({ length: 52 }).map((ff, weekIndex) => {
                                 const absoluteWeekIndex = yearIndex * 52 + weekIndex;
                                 const [color, _] = getColorAndEventForWeek(absoluteWeekIndex);
-                                const seasonClass = getSeasonClass(weekIndex);
                                 return (
                                     <td
                                         key={weekIndex}
-                                        className={`w-2 h-2 md:w-3 md:h-3 ${color} ${seasonClass}`}
+                                        className={`w-2 h-2 md:w-3 md:h-3 ${color}`}
                                         data-week={absoluteWeekIndex}
                                     />
                                 );
