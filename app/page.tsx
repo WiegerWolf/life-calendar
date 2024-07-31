@@ -20,17 +20,26 @@ export default function Home() {
       <div className="text-sm mb-4 text-center">
         <p>Born: Apr 15, 1991 | Age: {age} | Weeks: {weeksLived}</p>
       </div>
-      <div className="max-w-5xl mx-auto">
-        <LifeCalendar birthDate={birthDate} lifeEvents={lifeEvents} />
-      </div>
-      <div className="mt-4 text-sm text-gray-600 flex flex-wrap items-center justify-center">
-        <span className="inline-block w-3 h-3 bg-blue-500 mr-2"></span> Weeks lived
-        <span className="inline-block w-3 h-3 bg-gray-200 ml-4 mr-2"></span> Future weeks
-        {lifeEvents.map((event, index) => (
-          <span key={index} className="ml-4 flex items-center">
-            <span className={`inline-block w-3 h-3 ${event.color} mr-2`}></span> {event.name}
-          </span>
-        ))}
+      <div className="flex flex-col md:flex-row w-full max-w-6xl mx-auto">
+        <div className="md:w-3/4 mb-4 md:mb-0 md:mr-4">
+          <LifeCalendar birthDate={birthDate} lifeEvents={lifeEvents} />
+        </div>
+        <div className="md:w-1/4">
+          <h2 className="text-lg font-semibold mb-2">Legend</h2>
+          <div className="flex flex-col space-y-2">
+            <div className="flex items-center">
+              <span className="inline-block w-3 h-3 bg-blue-500 mr-2"></span> Weeks lived
+            </div>
+            <div className="flex items-center">
+              <span className="inline-block w-3 h-3 bg-gray-200 mr-2"></span> Future weeks
+            </div>
+            {lifeEvents.map((event, index) => (
+              <div key={index} className="flex items-center">
+                <span className={`inline-block w-3 h-3 ${event.color} mr-2`}></span> {event.name}
+              </div>
+            ))}
+          </div>
+        </div>
       </div>
     </main>
   );

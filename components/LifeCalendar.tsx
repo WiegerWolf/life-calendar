@@ -15,8 +15,9 @@ interface LifeCalendarProps {
 
 const LifeCalendar: React.FC<LifeCalendarProps> = ({ birthDate, lifeEvents }) => {
   const today = new Date();
-  const totalWeeks = 52 * 90; // Assuming a 90-year lifespan
   const weeksLived = Math.floor((today.getTime() - birthDate.getTime()) / (7 * 24 * 60 * 60 * 1000));
+  const futureWeeks = 52 * 5; // Show 5 years into the future
+  const totalWeeks = weeksLived + futureWeeks;
 
   const getDateOfWeek = (weekIndex: number) => {
     const date = new Date(birthDate.getTime() + weekIndex * 7 * 24 * 60 * 60 * 1000);
@@ -24,19 +25,24 @@ const LifeCalendar: React.FC<LifeCalendarProps> = ({ birthDate, lifeEvents }) =>
   };
 
   const getColorForWeek = (weekIndex: number) => {
-    const ageInWeeks = weekIndex;
-    for (const event of lifeEvents) {
-      const eventStartWeek = event.startAge * 52;
-      const eventEndWeek = eventStartWeek + (event.duration * 52);
-      if (ageInWeeks >= eventStartWeek && ageInWeeks < eventEndWeek) {
-        return event.color;
+    if (weekIndex < weeksLived) {
+      const ageInWeeks = weekIndex;
+      for (const event of lifeEvents) {
+        const eventStartWeek = event.startAge * 52;
+        const eventEndWeek = eventStartWeek + (event.duration * 52);
+        if (ageInWeeks >= eventStartWeek && ageInWeeks < eventEndWeek) {
+          return event.color;
+        }
       }
+      return 'bg-blue-500';
+    } else {
+      const opacity = 1 - (weekIndex - weeksLived) / futureWeeks;
+      return `bg-gray-200 opacity-${Math.max(5, Math.floor(opacity * 100))}`;
     }
-    return weekIndex < weeksLived ? 'bg-blue-500' : 'bg-gray-200';
   };
 
   return (
-    <div className="grid grid-cols-52 gap-1 max-w-5xl mx-auto">
+    <div className="grid grid-cols-52 gap-1">
       {Array.from({ length: totalWeeks }).map((_, index) => (
         <div
           key={index}
