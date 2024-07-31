@@ -87,6 +87,14 @@ const LifeCalendar: React.FC<LifeCalendarProps> = ({ birthDate, lifeEvents }) =>
     const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
     const seasons = ['Winter', 'Spring', 'Summer', 'Fall'];
 
+    const getSeasonClass = (weekIndex: number): string => {
+        const weekInYear = weekIndex % 52;
+        if (weekInYear < 13) return 'border-t-4 border-blue-200'; // Winter
+        if (weekInYear < 26) return 'border-t-4 border-green-200'; // Spring
+        if (weekInYear < 39) return 'border-t-4 border-yellow-200'; // Summer
+        return 'border-t-4 border-orange-200'; // Fall
+    };
+
     return (
         <div className="relative overflow-x-auto">
             <table
@@ -114,10 +122,11 @@ const LifeCalendar: React.FC<LifeCalendarProps> = ({ birthDate, lifeEvents }) =>
                             {Array.from({ length: 52 }).map((ff, weekIndex) => {
                                 const absoluteWeekIndex = yearIndex * 52 + weekIndex;
                                 const [color, _] = getColorAndEventForWeek(absoluteWeekIndex);
+                                const seasonClass = getSeasonClass(weekIndex);
                                 return (
                                     <td
                                         key={weekIndex}
-                                        className={`w-2 h-2 md:w-3 md:h-3 ${color}`}
+                                        className={`w-2 h-2 md:w-3 md:h-3 ${color} ${seasonClass}`}
                                         data-week={absoluteWeekIndex}
                                     />
                                 );
@@ -140,6 +149,12 @@ const LifeCalendar: React.FC<LifeCalendarProps> = ({ birthDate, lifeEvents }) =>
                     <p>Date: {tooltipData.date}</p>
                     {tooltipData.event && <p>Event: {tooltipData.event}</p>}
                     <p>{tooltipData.isPast ? 'Past' : 'Future'}</p>
+                    <div className="mt-4 text-sm">
+    <p><span className="inline-block w-3 h-3 border-t-4 border-blue-200 mr-2"></span>Winter</p>
+    <p><span className="inline-block w-3 h-3 border-t-4 border-green-200 mr-2"></span>Spring</p>
+    <p><span className="inline-block w-3 h-3 border-t-4 border-yellow-200 mr-2"></span>Summer</p>
+    <p><span className="inline-block w-3 h-3 border-t-4 border-orange-200 mr-2"></span>Fall</p>
+</div>
                 </div>
             )}
         </div>
