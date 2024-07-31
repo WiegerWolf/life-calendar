@@ -77,8 +77,8 @@ const LifeCalendar: React.FC<LifeCalendarProps> = ({ birthDate, lifeEvents }) =>
         date: getDateOfWeek(index),
         event: eventName,
         isPast: index < weeksLived,
-        x: event.clientX,
-        y: event.clientY,
+        x: x, // Use position relative to the grid
+        y: y, // Use position relative to the grid
       });
     } else {
       setTooltipData(null);
@@ -111,14 +111,15 @@ const LifeCalendar: React.FC<LifeCalendarProps> = ({ birthDate, lifeEvents }) =>
         <div
           className="absolute z-10 p-2 text-sm bg-white border rounded shadow-lg"
           style={{
-            left: `${tooltipData.x}px`,
-            top: `${tooltipData.y}px`,
+            left: `${tooltipData.x + 10}px`,
+            top: `${tooltipData.y + 10}px`,
+            transform: 'translate(-50%, -100%)', // Center horizontally and position above cursor
+            pointerEvents: 'none', // Ensure the tooltip doesn't interfere with mouse events
           }}
         >
           <p className="font-bold">Week {tooltipData.weekNumber}</p>
           <p>Date: {tooltipData.date}</p>
           {tooltipData.event && <p>Event: {tooltipData.event}</p>}
-          <p>{tooltipData.isPast ? 'Past' : 'Future'}</p>
         </div>
       )}
     </div>
