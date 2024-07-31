@@ -138,9 +138,9 @@ const LifeCalendar: React.FC<LifeCalendarProps> = ({ birthDate, lifeEvents }) =>
                         {seasonOrder.map((season, index) => {
                             const actualSeason = seasonOrder[(seasonOrder.indexOf(currentSeason) + index) % 4];
                             return (
-                                <th 
-                                    key={season} 
-                                    className={`${seasonColors[actualSeason]} font-semibold`} 
+                                <th
+                                    key={season}
+                                    className={`${seasonColors[actualSeason]} font-semibold`}
                                     colSpan={seasonLengths[index]}
                                 >
                                     {actualSeason}
@@ -148,8 +148,8 @@ const LifeCalendar: React.FC<LifeCalendarProps> = ({ birthDate, lifeEvents }) =>
                             );
                         })}
                         {seasonLengths[4] > 0 && (
-                            <th 
-                                className={`${seasonColors['Spring']} font-semibold`} 
+                            <th
+                                className={`${seasonColors['Spring']} font-semibold`}
                                 colSpan={seasonLengths[4]}
                             >
                                 Spring
