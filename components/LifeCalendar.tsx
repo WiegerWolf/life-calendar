@@ -14,6 +14,8 @@ interface LifeCalendarProps {
     lifeEvents: LifeEvent[];
 }
 
+type Season = 'Winter' | 'Spring' | 'Summer' | 'Fall';
+
 interface TooltipData {
     weekNumber: number;
     date: string;
@@ -108,8 +110,8 @@ const LifeCalendar: React.FC<LifeCalendarProps> = ({ birthDate, lifeEvents }) =>
     };
 
     const { currentSeason, weeksUntilNextSeason } = getSeasonInfo();
-    const seasonOrder = ['Winter', 'Spring', 'Summer', 'Fall'];
-    const seasonColors = {
+    const seasonOrder: Season[] = ['Winter', 'Spring', 'Summer', 'Fall'];
+    const seasonColors: Record<Season, string> = {
         Winter: 'bg-blue-100 text-blue-800',
         Spring: 'bg-green-100 text-green-800',
         Summer: 'bg-red-100 text-red-800',
@@ -136,7 +138,7 @@ const LifeCalendar: React.FC<LifeCalendarProps> = ({ birthDate, lifeEvents }) =>
                     <tr>
                         <th></th>
                         {seasonOrder.map((season, index) => {
-                            const actualSeason = seasonOrder[(seasonOrder.indexOf(currentSeason) + index) % 4];
+                            const actualSeason: Season = seasonOrder[(seasonOrder.indexOf(currentSeason as Season) + index) % 4];
                             return (
                                 <th
                                     key={season}
