@@ -28,18 +28,22 @@ const LifeCalendar: React.FC<LifeCalendarProps> = ({ birthDate, lifeEvents }) =>
   const gridRef = useRef<HTMLDivElement>(null);
 
   const today = new Date();
+  const startDate = new Date(birthDate.getFullYear(), 0, 1); // January 1st of birth year
+  const weeksBeforeBirth = Math.floor((birthDate.getTime() - startDate.getTime()) / (7 * 24 * 60 * 60 * 1000));
   const weeksLived = Math.floor((today.getTime() - birthDate.getTime()) / (7 * 24 * 60 * 60 * 1000));
   const futureWeeks = 52 * 5; // Show 5 years into the future
-  const totalWeeks = weeksLived + futureWeeks;
+  const totalWeeks = weeksBeforeBirth + weeksLived + futureWeeks;
 
   const getDateOfWeek = (weekIndex: number) => {
-    const date = new Date(birthDate.getTime() + weekIndex * 7 * 24 * 60 * 60 * 1000);
+    const date = new Date(startDate.getTime() + weekIndex * 7 * 24 * 60 * 60 * 1000);
     return date.toISOString().split('T')[0];
   };
 
   const getColorAndEventForWeek = (weekIndex: number): [string, string | null] => {
-    if (weekIndex < weeksLived) {
-      const ageInWeeks = weekIndex;
+    if (weekIndex < weeksBeforeBirth) {
+      return ['bg-gray-200', null]; // Weeks before birth
+    } else if (weekIndex < weeksBeforeBirth + weeksLived) {
+      const ageInWeeks = weekIndex - weeksBeforeBirth;
       for (const event of lifeEvents) {
         const eventStartWeek = event.startAge * 52;
         const eventEndWeek = eventStartWeek + (event.duration * 52);
@@ -49,7 +53,7 @@ const LifeCalendar: React.FC<LifeCalendarProps> = ({ birthDate, lifeEvents }) =>
       }
       return ['bg-blue-500', null];
     } else {
-      const opacity = 1 - (weekIndex - weeksLived) / futureWeeks;
+      const opacity = 1 - (weekIndex - (weeksBeforeBirth + weeksLived)) / futureWeeks;
       const opacityPercent = Math.max(5, Math.floor(opacity * 20) * 5);
       return [`bg-gray-200 opacity-${opacityPercent}`, null];
     }
@@ -95,7 +99,7 @@ const LifeCalendar: React.FC<LifeCalendarProps> = ({ birthDate, lifeEvents }) =>
   return (
     <div className="relative">
       {/* Month and Season Labels */}
-      <div className="flex mb-1">
+      <div className="flex mb-1 ml-8"> {/* Added left margin to align with grid */}
         {months.map((month, index) => (
           <div key={month} className="flex-1 text-xs text-center">
             {month}
@@ -108,10 +112,10 @@ const LifeCalendar: React.FC<LifeCalendarProps> = ({ birthDate, lifeEvents }) =>
 
       <div className="flex">
         {/* Year Labels */}
-        <div className="flex flex-col mr-2">
+        <div className="flex flex-col mr-2 pt-1.5"> {/* Added top padding to align with grid */}
           {Array.from({ length: Math.ceil(totalWeeks / 52) }).map((_, index) => (
-            <div key={index} className="h-3 text-xs flex items-center line-height">
-              {birthDate.getFullYear() + index}
+            <div key={index} className="h-3 text-xs flex items-center justify-end w-6">
+              {startDate.getFullYear() + index}
             </div>
           ))}
         </div>
@@ -119,11 +123,11 @@ const LifeCalendar: React.FC<LifeCalendarProps> = ({ birthDate, lifeEvents }) =>
         {/* Life Calendar Grid */}
         <div
           ref={gridRef}
-          className="grid grid-cols-52 gap-1"
+          className="grid grid-cols-52 gap-0.5"
           onMouseMove={handleMouseMove}
           onMouseLeave={handleMouseLeave}
         >
-          {Array.from({ length: totalWeeks }).map((foo, index) => {
+          {Array.from({ length: totalWeeks }).map((ff, index) => {
             const [color, _] = getColorAndEventForWeek(index);
             return (
               <div
