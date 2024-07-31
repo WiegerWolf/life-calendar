@@ -89,37 +89,67 @@ const LifeCalendar: React.FC<LifeCalendarProps> = ({ birthDate, lifeEvents }) =>
     setTooltipData(null);
   };
 
+  const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+  const seasons = ['Winter', 'Spring', 'Summer', 'Fall'];
+
   return (
     <div className="relative">
-      <div
-        ref={gridRef}
-        className="grid grid-cols-52 gap-1"
-        onMouseMove={handleMouseMove}
-        onMouseLeave={handleMouseLeave}
-      >
-        {Array.from({ length: totalWeeks }).map((_, index) => {
-          var [color, _] = getColorAndEventForWeek(index);
-          return (
-            <div
-              key={index}
-              className={`w-2 h-2 md:w-3 md:h-3 rounded-sm ${color}`}
-            />
-          );
-        })}
+      {/* Month and Season Labels */}
+      <div className="flex mb-1">
+        {months.map((month, index) => (
+          <div key={month} className="flex-1 text-xs text-center">
+            {month}
+            {index % 3 === 0 && (
+              <div className="text-xs font-bold">{seasons[Math.floor(index / 3)]}</div>
+            )}
+          </div>
+        ))}
       </div>
+
+      <div className="flex">
+        {/* Year Labels */}
+        <div className="flex flex-col mr-2">
+          {Array.from({ length: Math.ceil(totalWeeks / 52) }).map((_, index) => (
+            <div key={index} className="h-3 text-xs flex items-center line-height">
+              {birthDate.getFullYear() + index}
+            </div>
+          ))}
+        </div>
+
+        {/* Life Calendar Grid */}
+        <div
+          ref={gridRef}
+          className="grid grid-cols-52 gap-1"
+          onMouseMove={handleMouseMove}
+          onMouseLeave={handleMouseLeave}
+        >
+          {Array.from({ length: totalWeeks }).map((foo, index) => {
+            const [color, _] = getColorAndEventForWeek(index);
+            return (
+              <div
+                key={index}
+                className={`w-2 h-2 md:w-3 md:h-3 rounded-sm ${color}`}
+              />
+            );
+          })}
+        </div>
+      </div>
+
+      {/* Tooltip */}
       {tooltipData && (
         <div
           className="absolute z-10 p-2 text-sm bg-white border rounded shadow-lg"
           style={{
             left: `${tooltipData.x + 10}px`,
             top: `${tooltipData.y + 10}px`,
-            transform: 'translate(-50%, -100%)', // Center horizontally and position above cursor
-            pointerEvents: 'none', // Ensure the tooltip doesn't interfere with mouse events
+            transform: 'translate(-50%, -100%)',
+            pointerEvents: 'none',
           }}
         >
           <p className="font-bold">Week {tooltipData.weekNumber}</p>
           <p>Date: {tooltipData.date}</p>
           {tooltipData.event && <p>Event: {tooltipData.event}</p>}
+          <p>{tooltipData.isPast ? 'Past' : 'Future'}</p>
         </div>
       )}
     </div>
