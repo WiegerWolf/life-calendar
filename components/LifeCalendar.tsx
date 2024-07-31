@@ -88,11 +88,10 @@ const LifeCalendar: React.FC<LifeCalendarProps> = ({ birthDate, lifeEvents }) =>
     const seasons = ['Winter', 'Spring', 'Summer', 'Fall'];
 
     const getSeasonClass = (weekIndex: number): string => {
-        const weekInYear = weekIndex % 52;
-        if (weekInYear < 13) return 'border-t-4 border-blue-200'; // Winter
-        if (weekInYear < 26) return 'border-t-4 border-green-200'; // Spring
-        if (weekInYear < 39) return 'border-t-4 border-yellow-200'; // Summer
-        return 'border-t-4 border-orange-200'; // Fall
+        if (weekIndex === 13) return 'border-l-2 border-green-500'; // Spring
+        if (weekIndex === 26) return 'border-l-2 border-red-500'; // Summer
+        if (weekIndex === 39) return 'border-l-2 border-orange-500'; // Fall
+        return '';
     };
 
     return (
@@ -107,7 +106,7 @@ const LifeCalendar: React.FC<LifeCalendarProps> = ({ birthDate, lifeEvents }) =>
                     <tr>
                         <th></th>
                         {Array.from({ length: 52 }).map((_, index) => (
-                            <th key={index} className="text-xs font-normal px-1">
+                            <th key={index} className={`text-xs font-normal px-1 ${getSeasonClass(index)}`}>
                                 {index + 1}
                             </th>
                         ))}
