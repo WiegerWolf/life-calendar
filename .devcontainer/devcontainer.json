@@ -4,12 +4,16 @@
 	"build": {
 		"dockerfile": "Dockerfile"
 	},
-"remoteUser": "node",
-"customizations": {
-	"vscode": {
-		"extensions": [
-			"actboy168.tasks"
-		]
+	"features": {
+		"ghcr.io/shyim/devcontainers-features/bun:0": {},
+		// "ghcr.io/devcontainers-community/features/deno:1": {}
+	},
+	"remoteUser": "node",
+	"customizations": {
+		"vscode": {
+			"extensions": [
+				"actboy168.tasks"
+			]
+		}
 	}
-}
 }
