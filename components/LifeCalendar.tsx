@@ -45,7 +45,7 @@ const LifeCalendar: React.FC<LifeCalendarProps> = ({ birthDate, lifeEvents }) =>
                     return [event.color, event.name];
                 }
             }
-            return ['bg-blue-500', null]; // Default color for lived weeks
+            return ['bg-blue-200', null]; // Default color for lived weeks
         } else {
             const opacity = 1 - (weekIndex - weeksLived) / (52 * 5);
             const opacityPercent = Math.max(5, Math.floor(opacity * 20) * 5);
