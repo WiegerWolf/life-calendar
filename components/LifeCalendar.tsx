@@ -24,8 +24,8 @@ interface TooltipData {
   }
 
 const LifeCalendar: React.FC<LifeCalendarProps> = ({ birthDate, lifeEvents }) => {
-    const [tooltipData, setTooltipData] = useState<TooltipData | null>(null);
-    const tableRef = useRef<HTMLTableElement>(null);
+  const [tooltipData, setTooltipData] = useState<TooltipData | null>(null);
+  const tableRef = useRef<HTMLTableElement>(null);
 
     const today = new Date();
     const startDate = new Date(birthDate.getFullYear(), 0, 1); // January 1st of birth year
@@ -60,35 +60,34 @@ const LifeCalendar: React.FC<LifeCalendarProps> = ({ birthDate, lifeEvents }) =>
             return [`bg-gray-200 opacity-${opacityPercent}`, null];
         }
     };
-  
-    const handleMouseMove = (event: React.MouseEvent<HTMLTableElement>) => {
-      const target = event.target as HTMLTableCellElement;
-      if (target.tagName === 'TD' && target.dataset.week) {
-        const weekIndex = parseInt(target.dataset.week, 10);
-        const weekDate = new Date(startDate.getTime() + weekIndex * 7 * 24 * 60 * 60 * 1000);
-        const rect = target.getBoundingClientRect();
-        
-        let eventName = null;
-        for (const event of lifeEvents) {
-          if (weekDate >= event.startDate && weekDate <= event.endDate) {
-            eventName = event.name;
-            break;
-          }
+
+  const handleMouseMove = (event: React.MouseEvent<HTMLTableElement>) => {
+    const target = event.target as HTMLTableCellElement;
+    if (target.tagName === 'TD' && target.dataset.week) {
+      const weekIndex = parseInt(target.dataset.week, 10);
+      const weekDate = new Date(startDate.getTime() + weekIndex * 7 * 24 * 60 * 60 * 1000);
+      
+      let eventName = null;
+      for (const event of lifeEvents) {
+        if (weekDate >= event.startDate && weekDate <= event.endDate) {
+          eventName = event.name;
+          break;
         }
-  
-        setTooltipData({
-          weekNumber: weekIndex + 1,
-          date: weekDate.toISOString().split('T')[0],
-          event: eventName,
-          isPast: weekDate <= new Date(),
-          x: event.clientX - rect.left,
-          y: event.clientY - rect.top,
-        });
-      } else {
-        setTooltipData(null);
       }
-    };
-  
+
+      setTooltipData({
+        weekNumber: weekIndex + 1,
+        date: weekDate.toISOString().split('T')[0],
+        event: eventName,
+        isPast: weekDate <= new Date(),
+        x: event.clientX,
+        y: event.clientY,
+      });
+    } else {
+      setTooltipData(null);
+    }
+  };
+
     const handleMouseLeave = () => {
         setTooltipData(null);
     };
@@ -96,14 +95,14 @@ const LifeCalendar: React.FC<LifeCalendarProps> = ({ birthDate, lifeEvents }) =>
     const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
     const seasons = ['Winter', 'Spring', 'Summer', 'Fall'];
 
-    return (
-        <div className="relative overflow-x-auto">
-            <table
-                ref={tableRef}
-                className="border-collapse"
-                onMouseMove={handleMouseMove}
-                onMouseLeave={handleMouseLeave}
-            >
+  return (
+    <div className="relative overflow-x-auto">
+      <table
+        ref={tableRef}
+        className="border-collapse"
+        onMouseMove={handleMouseMove}
+        onMouseLeave={handleMouseLeave}
+      >
                 <thead>
                     <tr>
                         <th></th> {/* Empty cell for the top-left corner */}
@@ -137,26 +136,25 @@ const LifeCalendar: React.FC<LifeCalendarProps> = ({ birthDate, lifeEvents }) =>
                         </tr>
                     ))}
                 </tbody>
-            </table>
+      </table>
 
-            {tooltipData && (
-                <div
-                    className="absolute z-10 p-2 text-sm bg-white border rounded shadow-lg"
-                    style={{
-                        left: `${tooltipData.x + 10}px`,
-                        top: `${tooltipData.y + 10}px`,
-                        transform: 'translate(-50%, -100%)',
-                        pointerEvents: 'none',
-                    }}
-                >
-                    <p className="font-bold">Week {tooltipData.weekNumber}</p>
-                    <p>Date: {tooltipData.date}</p>
-                    {tooltipData.event && <p>Event: {tooltipData.event}</p>}
-                    <p>{tooltipData.isPast ? 'Past' : 'Future'}</p>
-                </div>
-            )}
+      {tooltipData && (
+        <div
+          className="fixed z-10 p-2 text-sm bg-white border rounded shadow-lg"
+          style={{
+            left: `${tooltipData.x + 10}px`,
+            top: `${tooltipData.y + 10}px`,
+            pointerEvents: 'none',
+          }}
+        >
+          <p className="font-bold">Week {tooltipData.weekNumber}</p>
+          <p>Date: {tooltipData.date}</p>
+          {tooltipData.event && <p>Event: {tooltipData.event}</p>}
+          <p>{tooltipData.isPast ? 'Past' : 'Future'}</p>
         </div>
-    );
-  };
-  
-  export default LifeCalendar;
+      )}
+    </div>
+  );
+};
+
+export default LifeCalendar;
