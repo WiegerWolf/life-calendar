@@ -29,7 +29,9 @@ const LifeCalendar: React.FC<LifeCalendarProps> = ({ birthDate, lifeEvents }) =>
 
   const today = new Date();
   const startDate = new Date(birthDate.getFullYear(), 0, 1); // January 1st of birth year
-  const weeksBeforeBirth = Math.floor((birthDate.getTime() - startDate.getTime()) / (7 * 24 * 60 * 60 * 1000));
+  startDate.setDate(startDate.getDate() + (1 - startDate.getDay())); // Adjust to the first Monday of the year
+
+  const weeksBeforeBirth = Math.ceil((birthDate.getTime() - startDate.getTime()) / (7 * 24 * 60 * 60 * 1000));
   const weeksLived = Math.floor((today.getTime() - birthDate.getTime()) / (7 * 24 * 60 * 60 * 1000));
   const futureWeeks = 52 * 5; // Show 5 years into the future
   const totalWeeks = weeksBeforeBirth + weeksLived + futureWeeks;
@@ -101,7 +103,7 @@ const LifeCalendar: React.FC<LifeCalendarProps> = ({ birthDate, lifeEvents }) =>
       {/* Month and Season Labels */}
       <div className="flex mb-1 ml-8"> {/* Added left margin to align with grid */}
         {months.map((month, index) => (
-          <div key={month} className="flex-1 text-xs text-center">
+          <div key={month} className="w-[7.69%] text-xs text-center"> {/* Fixed width for alignment */}
             {month}
             {index % 3 === 0 && (
               <div className="text-xs font-bold">{seasons[Math.floor(index / 3)]}</div>
