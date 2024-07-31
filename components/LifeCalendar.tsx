@@ -37,7 +37,8 @@ const LifeCalendar: React.FC<LifeCalendarProps> = ({ birthDate, lifeEvents }) =>
       return 'bg-blue-500';
     } else {
       const opacity = 1 - (weekIndex - weeksLived) / futureWeeks;
-      return `bg-gray-200 opacity-${Math.max(5, Math.floor(opacity * 100))}`;
+      const opacityPercent = Math.max(5, Math.floor(opacity * 20) * 5);
+      return `bg-gray-200 opacity-${opacityPercent}`;
     }
   };
 
@@ -46,7 +47,7 @@ const LifeCalendar: React.FC<LifeCalendarProps> = ({ birthDate, lifeEvents }) =>
       {Array.from({ length: totalWeeks }).map((_, index) => (
         <div
           key={index}
-          className={`w-2 h-2 rounded-sm ${getColorForWeek(index)}`}
+          className={`w-2 h-2 md:w-3 md:h-3 rounded-sm ${getColorForWeek(index)}`}
           title={`Week ${index + 1}: ${getDateOfWeek(index)}`}
         />
       ))}
