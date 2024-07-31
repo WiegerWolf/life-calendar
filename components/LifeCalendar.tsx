@@ -120,7 +120,8 @@ const LifeCalendar: React.FC<LifeCalendarProps> = ({ birthDate, lifeEvents }) =>
         weeksUntilNextSeason,
         13,
         13,
-        13
+        13,
+        52 - weeksUntilNextSeason - 39 // Remaining weeks for the last season
     ];
 
     return (
@@ -146,6 +147,15 @@ const LifeCalendar: React.FC<LifeCalendarProps> = ({ birthDate, lifeEvents }) =>
                                 </th>
                             );
                         })}
+                        {/* Add the last season (Spring) if necessary */}
+                        {seasonLengths[4] > 0 && (
+                            <th 
+                                className={`${seasonColors['Spring']} font-semibold`} 
+                                colSpan={seasonLengths[4]}
+                            >
+                                Spring
+                            </th>
+                        )}
                     </tr>
                     <tr>
                         <th></th>
