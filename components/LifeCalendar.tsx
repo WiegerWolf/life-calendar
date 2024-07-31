@@ -150,11 +150,11 @@ const LifeCalendar: React.FC<LifeCalendarProps> = ({ birthDate, lifeEvents }) =>
                     {tooltipData.event && <p>Event: {tooltipData.event}</p>}
                     <p>{tooltipData.isPast ? 'Past' : 'Future'}</p>
                     <div className="mt-4 text-sm">
-    <p><span className="inline-block w-3 h-3 border-t-4 border-blue-200 mr-2"></span>Winter</p>
-    <p><span className="inline-block w-3 h-3 border-t-4 border-green-200 mr-2"></span>Spring</p>
-    <p><span className="inline-block w-3 h-3 border-t-4 border-yellow-200 mr-2"></span>Summer</p>
-    <p><span className="inline-block w-3 h-3 border-t-4 border-orange-200 mr-2"></span>Fall</p>
-</div>
+                        <p><span className="inline-block w-3 h-3 border-t-4 border-blue-200 mr-2"></span>Winter</p>
+                        <p><span className="inline-block w-3 h-3 border-t-4 border-green-200 mr-2"></span>Spring</p>
+                        <p><span className="inline-block w-3 h-3 border-t-4 border-yellow-200 mr-2"></span>Summer</p>
+                        <p><span className="inline-block w-3 h-3 border-t-4 border-orange-200 mr-2"></span>Fall</p>
+                    </div>
                 </div>
             )}
         </div>
