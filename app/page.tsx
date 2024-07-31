@@ -8,13 +8,15 @@ export default function Home() {
   const weeksLived = Math.floor((today.getTime() - birthDate.getTime()) / (7 * 24 * 60 * 60 * 1000));
 
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center p-24">
-      <h1 className="text-4xl font-bold mb-4">My Life Calendar</h1>
-      <p className="mb-2">Born on: April 15, 1991</p>
-      <p className="mb-2">Current age: {age} years</p>
-      <p className="mb-8">Weeks lived: {weeksLived}</p>
-      <LifeCalendar birthDate={birthDate} />
-      <div className="mt-4 text-sm text-gray-600">
+    <main className="flex min-h-screen flex-col items-center justify-start p-4 sm:p-8">
+      <h1 className="text-2xl font-bold mb-2">My Life Calendar</h1>
+      <div className="text-sm mb-4 text-center">
+        <p>Born: Apr 15, 1991 | Age: {age} | Weeks: {weeksLived}</p>
+      </div>
+      <div className=" max-w-5xl mx-auto">
+        <LifeCalendar birthDate={birthDate} />
+      </div>
+      <div className="mt-4 text-sm text-gray-600 flex items-center justify-center">
         <span className="inline-block w-3 h-3 bg-blue-500 mr-2"></span> Weeks lived
         <span className="inline-block w-3 h-3 bg-gray-200 ml-4 mr-2"></span> Future weeks
       </div>
