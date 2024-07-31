@@ -1,7 +1,6 @@
 // components/LifeCalendar.tsx
 'use client';
-
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 
 interface LifeEvent {
   name: string;
@@ -26,6 +25,7 @@ interface TooltipData {
 
 const LifeCalendar: React.FC<LifeCalendarProps> = ({ birthDate, lifeEvents }) => {
   const [tooltipData, setTooltipData] = useState<TooltipData | null>(null);
+  const gridRef = useRef<HTMLDivElement>(null);
 
   const today = new Date();
   const weeksLived = Math.floor((today.getTime() - birthDate.getTime()) / (7 * 24 * 60 * 60 * 1000));
@@ -55,42 +55,54 @@ const LifeCalendar: React.FC<LifeCalendarProps> = ({ birthDate, lifeEvents }) =>
     }
   };
 
-  const handleMouseEnter = (event: React.MouseEvent, index: number) => {
-    const [_, eventName] = getColorAndEventForWeek(index);
-    setTooltipData({
-      weekNumber: index + 1,
-      date: getDateOfWeek(index),
-      event: eventName,
-      isPast: index < weeksLived,
-      x: event.clientX,
-      y: event.clientY,
-    });
+  const handleMouseMove = (event: React.MouseEvent) => {
+    if (!gridRef.current) return;
+
+    const rect = gridRef.current.getBoundingClientRect();
+    const x = event.clientX - rect.left;
+    const y = event.clientY - rect.top;
+
+    const blockWidth = rect.width / 52;
+    const blockHeight = rect.height / Math.ceil(totalWeeks / 52);
+
+    const col = Math.floor(x / blockWidth);
+    const row = Math.floor(y / blockHeight);
+
+    const index = row * 52 + col;
+
+    if (index >= 0 && index < totalWeeks) {
+      const [_, eventName] = getColorAndEventForWeek(index);
+      setTooltipData({
+        weekNumber: index + 1,
+        date: getDateOfWeek(index),
+        event: eventName,
+        isPast: index < weeksLived,
+        x: event.clientX,
+        y: event.clientY,
+      });
+    } else {
+      setTooltipData(null);
+    }
   };
 
   const handleMouseLeave = () => {
     setTooltipData(null);
   };
 
-  const handleMouseMove = (event: React.MouseEvent) => {
-    if (tooltipData) {
-      setTooltipData({
-        ...tooltipData,
-        x: event.clientX,
-        y: event.clientY,
-      });
-    }
-  };
-
   return (
-    <div className="relative" onMouseMove={handleMouseMove}>
-      <div className="grid grid-cols-52 gap-1">
+    <div className="relative">
+      <div
+        ref={gridRef}
+        className="grid grid-cols-52 gap-1"
+        onMouseMove={handleMouseMove}
+        onMouseLeave={handleMouseLeave}
+      >
         {Array.from({ length: totalWeeks }).map((_, index) => {
-const [color, ignoredValue] = getColorAndEventForWeek(index);          return (
+          var [color, _] = getColorAndEventForWeek(index);
+          return (
             <div
               key={index}
               className={`w-2 h-2 md:w-3 md:h-3 rounded-sm ${color}`}
-              onMouseEnter={(e) => handleMouseEnter(e, index)}
-              onMouseLeave={handleMouseLeave}
             />
           );
         })}
@@ -99,8 +111,8 @@ const [color, ignoredValue] = getColorAndEventForWeek(index);          return (
         <div
           className="absolute z-10 p-2 text-sm bg-white border rounded shadow-lg"
           style={{
-            left: `${tooltipData.x + 10}px`,
-            top: `${tooltipData.y + 10}px`,
+            left: `${tooltipData.x}px`,
+            top: `${tooltipData.y}px`,
           }}
         >
           <p className="font-bold">Week {tooltipData.weekNumber}</p>
