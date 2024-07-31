@@ -157,15 +157,6 @@ const LifeCalendar: React.FC<LifeCalendarProps> = ({ birthDate, lifeEvents }) =>
                         )}
                         <th></th> {/* Add an empty header for the age column */}
                     </tr>
-                    <tr>
-                        <th></th>
-                        {Array.from({ length: 52 }).map((_, index) => (
-                            <th key={index} className="text-xs font-normal px-1">
-                                {index + 1}
-                            </th>
-                        ))}
-                        <th className="text-xs font-semibold px-2">Age</th> {/* Add header for age column */}
-                    </tr>
                 </thead>
                 <tbody>
                     {Array.from({ length: totalYears }).map((_, yearIndex) => (
