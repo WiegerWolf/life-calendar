@@ -2,9 +2,24 @@
 import LifeCalendar from '../components/LifeCalendar';
 
 const lifeEvents = [
-  { name: 'School', startAge: 7, duration: 8, color: 'bg-green-500' },
-  { name: 'College', startAge: 15, duration: 4, color: 'bg-yellow-500' },
-  { name: 'Army', startAge: 19, duration: 1, color: 'bg-red-500' },
+  { 
+    name: 'School', 
+    startDate: new Date(1998, 8, 1), // September 1, 1998
+    endDate: new Date(2006, 5, 1),   // June 1, 2006
+    color: 'bg-green-500' 
+  },
+  { 
+    name: 'College', 
+    startDate: new Date(2006, 8, 1), // September 1, 2006
+    endDate: new Date(2010, 5, 1),   // June 1, 2010
+    color: 'bg-yellow-500' 
+  },
+  { 
+    name: 'Army', 
+    startDate: new Date(2010, 6, 1), // July 1, 2010
+    endDate: new Date(2011, 6, 1),   // July 1, 2011
+    color: 'bg-red-500' 
+  },
   // Add more life events as needed
 ];
 
@@ -22,7 +37,7 @@ export default function Home() {
       </div>
       <div className="flex flex-col md:flex-row w-full max-w-6xl mx-auto">
         <div className="md:w-3/4 mb-4 md:mb-0 md:mr-4">
-          <LifeCalendar birthDate={birthDate} lifeEvents={lifeEvents} />
+      <LifeCalendar birthDate={birthDate} lifeEvents={lifeEvents} />
         </div>
         <div className="md:w-1/4">
           <h2 className="text-lg font-semibold mb-2">Legend</h2>
