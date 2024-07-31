@@ -84,14 +84,25 @@ const LifeCalendar: React.FC<LifeCalendarProps> = ({ birthDate, lifeEvents }) =>
         setTooltipData(null);
     };
 
-    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-    const seasons = ['Winter', 'Spring', 'Summer', 'Fall'];
 
     const getSeasonClass = (weekIndex: number): string => {
-        if (weekIndex === 13) return 'border-l-2 border-green-500'; // Spring
-        if (weekIndex === 26) return 'border-l-2 border-red-500'; // Summer
-        if (weekIndex === 39) return 'border-l-2 border-orange-500'; // Fall
+        const birthWeek = birthDate.getWeek();
+        const adjustedWeekIndex = (weekIndex + birthWeek) % 52;
+
+        if (adjustedWeekIndex === 0) return 'border-l-2 border-blue-500'; // Winter
+        if (adjustedWeekIndex === 13) return 'border-l-2 border-green-500'; // Spring
+        if (adjustedWeekIndex === 26) return 'border-l-2 border-red-500'; // Summer
+        if (adjustedWeekIndex === 39) return 'border-l-2 border-orange-500'; // Fall
         return '';
+    };
+
+    // Helper function to get the week number of a date
+    Date.prototype.getWeek = function() {
+        const d = new Date(Date.UTC(this.getFullYear(), this.getMonth(), this.getDate()));
+        const dayNum = d.getUTCDay() || 7;
+        d.setUTCDate(d.getUTCDate() + 4 - dayNum);
+        const yearStart = new Date(Date.UTC(d.getUTCFullYear(),0,1));
+        return Math.ceil((((d.getTime() - yearStart.getTime()) / 86400000) + 1)/7);
     };
 
     return (
@@ -148,12 +159,6 @@ const LifeCalendar: React.FC<LifeCalendarProps> = ({ birthDate, lifeEvents }) =>
                     <p>Date: {tooltipData.date}</p>
                     {tooltipData.event && <p>Event: {tooltipData.event}</p>}
                     <p>{tooltipData.isPast ? 'Past' : 'Future'}</p>
-                    <div className="mt-4 text-sm">
-                        <p><span className="inline-block w-3 h-3 border-t-4 border-blue-200 mr-2"></span>Winter</p>
-                        <p><span className="inline-block w-3 h-3 border-t-4 border-green-200 mr-2"></span>Spring</p>
-                        <p><span className="inline-block w-3 h-3 border-t-4 border-yellow-200 mr-2"></span>Summer</p>
-                        <p><span className="inline-block w-3 h-3 border-t-4 border-orange-200 mr-2"></span>Fall</p>
-                    </div>
                 </div>
             )}
         </div>
