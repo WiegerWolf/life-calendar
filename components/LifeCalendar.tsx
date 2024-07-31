@@ -105,6 +105,12 @@ const LifeCalendar: React.FC<LifeCalendarProps> = ({ birthDate, lifeEvents }) =>
         return Math.ceil((((d.getTime() - yearStart.getTime()) / 86400000) + 1)/7);
     };
 
+    const birthWeek = birthDate.getWeek();
+    const seasonStarts = [0, 13, 26, 39].map(week => (52 + week - birthWeek) % 52);
+    const seasonLengths = seasonStarts.map((start, index) => 
+        (seasonStarts[(index + 1) % 4] - start + 52) % 52
+    );
+
     return (
         <div className="relative overflow-x-auto">
             <table
@@ -114,6 +120,13 @@ const LifeCalendar: React.FC<LifeCalendarProps> = ({ birthDate, lifeEvents }) =>
                 onMouseLeave={handleMouseLeave}
             >
                 <thead>
+                    <tr>
+                        <th></th>
+                        <th className="bg-blue-100 text-blue-800 font-semibold" colSpan={seasonLengths[0]}>Winter</th>
+                        <th className="bg-green-100 text-green-800 font-semibold" colSpan={seasonLengths[1]}>Spring</th>
+                        <th className="bg-red-100 text-red-800 font-semibold" colSpan={seasonLengths[2]}>Summer</th>
+                        <th className="bg-orange-100 text-orange-800 font-semibold" colSpan={seasonLengths[3]}>Fall</th>
+                    </tr>
                     <tr>
                         <th></th>
                         {Array.from({ length: 52 }).map((_, index) => (
