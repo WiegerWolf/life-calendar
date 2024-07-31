@@ -161,7 +161,7 @@ const LifeCalendar: React.FC<LifeCalendarProps> = ({ birthDate, lifeEvents }) =>
                 <tbody>
                     {Array.from({ length: totalYears }).map((_, yearIndex) => (
                         <tr key={yearIndex}>
-                            <th className="text-xs font-normal pr-2 text-right">
+                            <th className="text-xs font-mono pr-2 text-right">
                                 {birthDate.getFullYear() + yearIndex}
                             </th>
                             {Array.from({ length: 52 }).map((ff, weekIndex) => {
@@ -175,7 +175,7 @@ const LifeCalendar: React.FC<LifeCalendarProps> = ({ birthDate, lifeEvents }) =>
                                     />
                                 );
                             })}
-                            <td className="text-xs font-normal pl-2 text-left">
+                            <td className="text-xs font-mono pl-2 text-left">
                                 {yearIndex} {/* Display age */}
                             </td>
                         </tr>
