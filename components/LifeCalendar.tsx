@@ -113,7 +113,7 @@ const LifeCalendar: React.FC<LifeCalendarProps> = ({ birthDate, lifeEvents }) =>
           {Array.from({ length: totalYears }).map((_, yearIndex) => (
             <tr key={yearIndex}>
               <th className="text-xs font-normal pr-2 text-right">
-                {startDate.getFullYear() + yearIndex}
+                {birthDate.getFullYear() + yearIndex}
               </th>
               {Array.from({ length: 52 }).map((ff, weekIndex) => {
                 const absoluteWeekIndex = yearIndex * 52 + weekIndex;
