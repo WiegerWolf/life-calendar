@@ -86,30 +86,51 @@ const LifeCalendar: React.FC<LifeCalendarProps> = ({ birthDate, lifeEvents }) =>
 
 
     const getSeasonClass = (weekIndex: number): string => {
-        const birthWeek = birthDate.getWeek();
-        const adjustedWeekIndex = (weekIndex + birthWeek) % 52;
-
-        if (adjustedWeekIndex === 0) return 'border-l-2 border-blue-500'; // Winter
-        if (adjustedWeekIndex === 13) return 'border-l-2 border-green-500'; // Spring
-        if (adjustedWeekIndex === 26) return 'border-l-2 border-red-500'; // Summer
-        if (adjustedWeekIndex === 39) return 'border-l-2 border-orange-500'; // Fall
+        if (weekIndex === 0) return 'border-l-2 border-blue-500'; // Winter
+        if (weekIndex === 13) return 'border-l-2 border-green-500'; // Spring
+        if (weekIndex === 26) return 'border-l-2 border-red-500'; // Summer
+        if (weekIndex === 39) return 'border-l-2 border-orange-500'; // Fall
         return '';
     };
 
-    // Helper function to get the week number of a date
-    Date.prototype.getWeek = function() {
-        const d = new Date(Date.UTC(this.getFullYear(), this.getMonth(), this.getDate()));
-        const dayNum = d.getUTCDay() || 7;
-        d.setUTCDate(d.getUTCDate() + 4 - dayNum);
-        const yearStart = new Date(Date.UTC(d.getUTCFullYear(),0,1));
-        return Math.ceil((((d.getTime() - yearStart.getTime()) / 86400000) + 1)/7);
+    const getSeasonInfo = () => {
+        const birthMonth = birthDate.getMonth();
+        const birthDay = birthDate.getDate();
+        let currentSeason;
+        let weeksUntilNextSeason;
+
+        if ((birthMonth === 11 && birthDay >= 21) || birthMonth < 2 || (birthMonth === 2 && birthDay < 20)) {
+            currentSeason = 'Winter';
+            weeksUntilNextSeason = Math.ceil((new Date(birthDate.getFullYear(), 2, 20).getTime() - birthDate.getTime()) / (7 * 24 * 60 * 60 * 1000));
+        } else if (birthMonth < 5 || (birthMonth === 5 && birthDay < 21)) {
+            currentSeason = 'Spring';
+            weeksUntilNextSeason = Math.ceil((new Date(birthDate.getFullYear(), 5, 21).getTime() - birthDate.getTime()) / (7 * 24 * 60 * 60 * 1000));
+        } else if (birthMonth < 8 || (birthMonth === 8 && birthDay < 23)) {
+            currentSeason = 'Summer';
+            weeksUntilNextSeason = Math.ceil((new Date(birthDate.getFullYear(), 8, 23).getTime() - birthDate.getTime()) / (7 * 24 * 60 * 60 * 1000));
+        } else {
+            currentSeason = 'Fall';
+            weeksUntilNextSeason = Math.ceil((new Date(birthDate.getFullYear() + 1, 11, 21).getTime() - birthDate.getTime()) / (7 * 24 * 60 * 60 * 1000));
+        }
+
+        return { currentSeason, weeksUntilNextSeason };
     };
 
-    const birthWeek = birthDate.getWeek();
-    const seasonStarts = [0, 13, 26, 39].map(week => (52 + week - birthWeek) % 52);
-    const seasonLengths = seasonStarts.map((start, index) => 
-        (seasonStarts[(index + 1) % 4] - start + 52) % 52
-    );
+    const { currentSeason, weeksUntilNextSeason } = getSeasonInfo();
+    const seasonOrder = ['Winter', 'Spring', 'Summer', 'Fall'];
+    const seasonColors = {
+        Winter: 'bg-blue-100 text-blue-800',
+        Spring: 'bg-green-100 text-green-800',
+        Summer: 'bg-red-100 text-red-800',
+        Fall: 'bg-orange-100 text-orange-800'
+    };
+
+    const seasonLengths = [
+        weeksUntilNextSeason,
+        13,
+        13,
+        13
+    ];
 
     return (
         <div className="relative overflow-x-auto">
@@ -122,10 +143,18 @@ const LifeCalendar: React.FC<LifeCalendarProps> = ({ birthDate, lifeEvents }) =>
                 <thead>
                     <tr>
                         <th></th>
-                        <th className="bg-blue-100 text-blue-800 font-semibold" colSpan={seasonLengths[0]}>Winter</th>
-                        <th className="bg-green-100 text-green-800 font-semibold" colSpan={seasonLengths[1]}>Spring</th>
-                        <th className="bg-red-100 text-red-800 font-semibold" colSpan={seasonLengths[2]}>Summer</th>
-                        <th className="bg-orange-100 text-orange-800 font-semibold" colSpan={seasonLengths[3]}>Fall</th>
+                        {seasonOrder.map((season, index) => {
+                            const actualSeason = seasonOrder[(seasonOrder.indexOf(currentSeason) + index) % 4];
+                            return (
+                                <th 
+                                    key={season} 
+                                    className={`${seasonColors[actualSeason]} font-semibold`} 
+                                    colSpan={seasonLengths[index]}
+                                >
+                                    {actualSeason}
+                                </th>
+                            );
+                        })}
                     </tr>
                     <tr>
                         <th></th>
