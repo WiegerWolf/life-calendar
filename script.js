@@ -148,6 +148,8 @@ function renderCalendar() {
     tbody.appendChild(tr);
   }
 
+  table.appendChild(tbody);
+
   table.addEventListener("mousemove", (event) => {
     const target = event.target;
     if (!(target instanceof HTMLTableCellElement) || !target.classList.contains("week")) {
