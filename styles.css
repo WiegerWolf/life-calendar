@@ -1,0 +1,115 @@
+:root {
+  --bg: #f7f7f4;
+  --card: #ffffff;
+  --text: #1d1d1b;
+  --muted: #5b5b58;
+  --line: #d9d9d3;
+  --future: #ecece7;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: "IBM Plex Sans", "Segoe UI", Arial, sans-serif;
+  color: var(--text);
+  background: radial-gradient(circle at top right, #edeadf, var(--bg) 45%);
+}
+
+.page {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 24px 16px 48px;
+}
+
+.hero h1 {
+  margin: 0;
+  font-size: 2rem;
+}
+
+.hero p {
+  margin: 8px 0 0;
+  color: var(--muted);
+}
+
+.card {
+  margin-top: 16px;
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 10px;
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.04);
+}
+
+.calendar-wrap {
+  overflow: auto;
+}
+
+table {
+  border-collapse: collapse;
+  white-space: nowrap;
+}
+
+th,
+td {
+  padding: 0;
+}
+
+.year,
+.age {
+  font: 12px/1.1 "IBM Plex Mono", Consolas, monospace;
+  color: var(--muted);
+}
+
+.year {
+  text-align: right;
+  padding-right: 8px;
+}
+
+.age {
+  text-align: left;
+  padding-left: 8px;
+}
+
+.season {
+  font: 600 11px/1 "IBM Plex Sans", "Segoe UI", Arial, sans-serif;
+  text-align: center;
+  padding: 3px 0;
+}
+
+.week {
+  width: 12px;
+  height: 12px;
+  border: 1px solid rgba(0, 0, 0, 0.04);
+}
+
+.future {
+  background: var(--future);
+}
+
+.tooltip {
+  position: fixed;
+  z-index: 10;
+  pointer-events: none;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #fff;
+  color: var(--text);
+  font-size: 12px;
+  line-height: 1.4;
+  padding: 8px 10px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+}
+
+@media (max-width: 768px) {
+  .week {
+    width: 9px;
+    height: 9px;
+  }
+
+  .hero h1 {
+    font-size: 1.6rem;
+  }
+}
