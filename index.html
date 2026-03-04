@@ -3,42 +3,36 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Life Calendar</title>
-    <meta name="description" content="Life calendar in weeks — every square is a week of life">
+    <title>Life in Weeks</title>
+    <meta name="description" content="A life visualized — every square is one week">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
   </head>
   <body>
-    <main class="page">
 
-      <!-- Hero stats strip -->
-      <header class="hero">
-        <div class="hero-title">
-          <h1>Life in Weeks</h1>
-          <p class="subtitle">Each square = 1 week. <span class="hide-mobile">Hover to explore. Click a phase to highlight.</span></p>
-        </div>
-        <div class="stats-strip" id="stats-strip"></div>
-      </header>
+    <!-- Floating header -->
+    <header class="hud">
+      <div class="hud-left">
+        <span class="hud-age" id="hud-age"></span>
+        <span class="hud-detail" id="hud-detail"></span>
+      </div>
+      <button class="hud-btn" id="legend-toggle" aria-label="Toggle legend">Phases</button>
+    </header>
 
-      <!-- Legend / life phases -->
-      <nav class="legend" id="legend"></nav>
+    <!-- Legend drawer -->
+    <aside class="legend-drawer" id="legend-drawer" hidden>
+      <div class="legend-inner" id="legend-inner"></div>
+    </aside>
 
-      <!-- Decade jump nav -->
-      <div class="decade-nav" id="decade-nav"></div>
+    <!-- The grid -->
+    <div class="grid-viewport" id="grid-viewport">
+      <div class="grid" id="grid"></div>
+    </div>
 
-      <!-- The calendar -->
-      <section class="card">
-        <div id="calendar-container" class="calendar-wrap"></div>
-      </section>
-
-      <!-- Timeline breakdown -->
-      <section class="breakdown" id="breakdown"></section>
-
-    </main>
-
-    <div id="tooltip" class="tooltip" hidden></div>
+    <!-- Tooltip -->
+    <div class="tip" id="tip" hidden></div>
 
     <script src="script.js"></script>
   </body>
