@@ -4,23 +4,42 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Life Calendar</title>
-    <meta name="description" content="Life calendar in weeks">
+    <meta name="description" content="Life calendar in weeks — every square is a week of life">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
   </head>
   <body>
     <main class="page">
+
+      <!-- Hero stats strip -->
       <header class="hero">
-        <h1>Life Calendar</h1>
-        <p>One square = one week. Hover for date + life event.</p>
+        <div class="hero-title">
+          <h1>Life in Weeks</h1>
+          <p class="subtitle">Each square = 1 week. <span class="hide-mobile">Hover to explore. Click a phase to highlight.</span></p>
+        </div>
+        <div class="stats-strip" id="stats-strip"></div>
       </header>
 
+      <!-- Legend / life phases -->
+      <nav class="legend" id="legend"></nav>
+
+      <!-- Decade jump nav -->
+      <div class="decade-nav" id="decade-nav"></div>
+
+      <!-- The calendar -->
       <section class="card">
         <div id="calendar-container" class="calendar-wrap"></div>
       </section>
+
+      <!-- Timeline breakdown -->
+      <section class="breakdown" id="breakdown"></section>
+
     </main>
 
     <div id="tooltip" class="tooltip" hidden></div>
 
     <script src="script.js"></script>
   </body>
-  </html>
+</html>
